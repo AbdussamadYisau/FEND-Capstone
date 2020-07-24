@@ -40,15 +40,13 @@ function getData(req,res){
 
 // POST route setup to add an entry to the project endpoint
 
-const data = [];
-
 app.post('/addData', addData);
 
 function addData(req, res){
     let newData = req.body;
 
-    projectData['to'] = newData.to;
-    projectData['from'] = newData.from;
+    projectData['to'] = newData.whereTo;
+    projectData['from'] = newData.whereFrom;
     projectData['temperature'] = newData.temperature;
     projectData['weather'] = newData.weather_condition;
     projectData['daystogo'] = newData.daystogo;
