@@ -1,4 +1,6 @@
 body {
+    display: flex;
+    justify-content: center;
     margin:0;
     padding: 0;
     // background-image: url("../assets/airport.jpg");
@@ -7,6 +9,10 @@ body {
     background: linear-gradient(to right, rgb(0, 217, 255), rgb(225, 255, 0));
 }
 
+img {
+    width: 300px;
+    height: 400px;
+}
 .invisible {
     display: none !important;
 }

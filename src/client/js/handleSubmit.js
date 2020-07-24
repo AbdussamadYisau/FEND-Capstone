@@ -3,14 +3,14 @@ const details = {};
 // Base URLs and API keys for GeoNames, Weatherbit and Pixabay URLs
 //  GeoNames
 const geoNamesURL = 'http://api.geonames.org/searchJSON?q=';
-const geoNamesApiKey = 'saumyapandeyy';
+const geoNamesApiKey = 'sammieyisau';
 //  Weatherbit
 const weatherBitForecastUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=';
 const weatherBitHistoryUrl = 'https://api.weatherbit.io/v2.0/history/daily?lat=';
 const weatherBitApiKey = '26ce153221364218b08d75d11be68644';
 //  Pixabay
 const pixaBayUrl = 'https://pixabay.com/api/?key=';
-const pixaBayApiKey = '17634480-5762482d601512763f72879d0';
+const pixaBayApiKey = '16471602-8e4cf128d083ab992b7ab8332';
 
 const tripDetails = document.querySelector('#tripDetailsSection');
 const websiteMain = document.querySelector('.mainBody');
@@ -99,7 +99,7 @@ async function getWeatherData(Lat, Long, date) {
 
 // Function to get Pixabay Api Data
 async function getImage(toCity) {
-    const response = await fetch(`${pixaBayUrl}${pixaBayApiKey}&q=${toCity}city&image_type=photo`);
+    const response = await fetch(`${pixaBayUrl}${pixaBayApiKey}&q=${toCity} city&image_type=photo`);
     try {
         return await response.json();
     } catch (e) {
@@ -143,7 +143,7 @@ function updateUI(data) {
     departureDate.innerHTML = data.date;
 
     if (data.daystogo < 0) {
-        document.querySelector('#daystogo').innerHTML = 'Seems like you have already been to the trip!';
+        document.querySelector('#daystogo').innerHTML = 'Seems like you have missed your flight!';
     } else {
         numberOfDays.innerHTML = data.daystogo;
     }
