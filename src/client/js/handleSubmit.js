@@ -1,15 +1,18 @@
 const details = {};
 
-// All the resources of APIs
+// Base URLs and API keys for GeoNames, Weatherbit and Pixabay URLs
+//  GeoNames
 const geoNamesURL = 'http://api.geonames.org/searchJSON?q=';
-const username = 'saumyapandeyy';
-const weatherbitforecastURL = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=';
-const weatherbithistoryURL = 'https://api.weatherbit.io/v2.0/history/daily?lat=';
-const weatherbitkey = 'a0b6e906ce164165b3dffd63e9425495';
-const pixabayURL = 'https://pixabay.com/api/?key=';
-const pixabayAPI = '16471602-8e4cf128d083ab992b7ab8332';
+const geoNamesApiKey = 'saumyapandeyy';
+//  Weatherbit
+const weatherBitForecastUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=';
+const weatherBitHistoryUrl = 'https://api.weatherbit.io/v2.0/history/daily?lat=';
+const weatherBitApiKey = '26ce153221364218b08d75d11be68644';
+//  Pixabay
+const pixaBayUrl = 'https://pixabay.com/api/?key=';
+const pixaBayApiKey = '17634480-5762482d601512763f72879d0';
 
-const tripDetails = document.querySelector('#tripDetails');
+const tripDetails = document.querySelector('#tripDetailsSection');
 const websiteMain = document.querySelector('.mainBody');
 
 
@@ -17,22 +20,22 @@ const websiteMain = document.querySelector('.mainBody');
 function handleSubmit(e) {
     e.preventDefault(); //Prevent default behaviour to stop page reload
 
-    // Getting elements value from DOM
+    // Get user input values
     details['whereFrom'] = document.querySelector('#whereFrom').value;
     details['whereTo'] = document.querySelector('#whereTo').value;
     details['date'] = document.querySelector('#departureDate').value;
-    details['leavingWhen'] = date_diff_indays(details['date']);
+    details['leavingWhen'] = dateDiffInDays(details['date']);
 
     try {
         // Fetching geo stats of destination place.
-        getGeoDetails(details['whereTo'])
+        getGeoData(details['whereTo'])
             .then((toInfo) => {
-                //Assigning the fetched value from JSON toInfo
-                const toLat = toInfo.geonames[0].lat;
-                const toLng = toInfo.geonames[0].lng;
+                //Assigning the data fetched from JSON toInfo
+                const Lat = toInfo.geonames[0].lat;
+                const Long = toInfo.geonames[0].lng;
 
                 //Getting Weather details
-                return getWeatherData(toLat, toLng, details['date']);
+                return getWeatherData(Lat, Long, details['date']);
             })
             .then((weatherData) => {
                 //Storing the weather details
@@ -58,9 +61,9 @@ function handleSubmit(e) {
     }
 }
 
-// Function to get Geo stats
-async function getGeoDetails(to) {
-    const response = await fetch(geoNamesURL + to + '&maxRows=10&username=' + username);
+// Function to get GeoNames Api Data
+async function getGeoData(to) {
+    const response = await fetch(`${geoNamesURL}${to}&maxRows=10&username=${geoNamesApiKey}`);
     try {
         return await response.json();
     } catch (e) {
@@ -69,22 +72,22 @@ async function getGeoDetails(to) {
 }
 
 
-//Function to get weather data
-async function getWeatherData(toLat, toLng, date) {
+//Function to get weatherbit Api Data
+async function getWeatherData(Lat, Long, date) {
 
     // Getting the timestamp for the current date and traveling date for upcoming processing.
-    const timestamp_trip_date = Math.floor(new Date(date).getTime() / 1000);
+    const timeStampOfTripDate = Math.floor(new Date(date).getTime() / 1000);
     const todayDate = new Date();
-    const timestamp_today = Math.floor(new Date(todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate()).getTime() / 1000);
+    const timeStampOfToday = Math.floor(new Date(todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate()).getTime() / 1000);
 
     let response;
     // Check if the date is gone and call the appropriate endpoint.
-    if (timestamp_trip_date < timestamp_today) {
-        let next_date = new Date(date);
-        next_date.setDate(next_date.getDate() + 1);
-        response = await fetch(weatherbithistoryURL + toLat + '&lon=' + toLng + '&start_date=' + date + '&end_date=' + next_date + '&key=' + weatherbitkey)
+    if (timeStampOfTripDate < timeStampOfToday) {
+        let nextDate = new Date(date);
+        nextDate.setDate(nextDate.getDate() + 1);
+        response = await fetch(`${weatherBitHistoryUrl}${Lat}&lon=${Long}&start_date=${date}end_date=${nextDate}&key=${weatherbitkey}`)
     } else {
-        response = await fetch(weatherbitforecastURL + toLat + '&lon=' + toLng + '&key=' + weatherbitkey);
+        response = await fetch(`${weatherBitForecastUrl}${Lat}&lon=${Long}&key=${weatherBitApiKey}`);
     }
 
     try {
@@ -94,8 +97,9 @@ async function getWeatherData(toLat, toLng, date) {
     }
 }
 
+// Function to get Pixabay Api Data
 async function getImage(toCity) {
-    const response = await fetch(pixabayURL + pixabayAPI + '&q=' + toCity + ' city&image_type=photo');
+    const response = await fetch(`${pixaBayUrl}${pixaBayApiKey}&q=${toCity}city&image_type=photo`);
     try {
         return await response.json();
     } catch (e) {
@@ -103,8 +107,9 @@ async function getImage(toCity) {
     }
 }
 
+//  Function to post data
 async function postData(details) {
-    const response = await fetch('http://localhost:3030/postData', {
+    const response = await fetch('http://localhost:3030/addData', {
         method: "POST",
         credentials: 'same-origin',
         headers: {
@@ -120,37 +125,37 @@ async function postData(details) {
     }
 }
 
-//Updating the UI
+// Function to update UI
 function updateUI(data) {
     tripDetails.classList.remove('invisible');
     tripDetails.scrollIntoView({behavior: "smooth"});
 
-    let destination_details = document.querySelector("#destination");
-    let boarding_details = document.querySelector("#boarding");
-    let departure_date = document.querySelector("#departing_date");
-    let number_of_days = document.querySelector('#number_of_days');
+    let destinationDetails = document.querySelector("#destination");
+    let boardingDetails = document.querySelector("#boarding");
+    let departureDate = document.querySelector("#departureDate");
+    let numberOfDays = document.querySelector('#numberOfDays');
     let temperature = document.querySelector('#temperature');
-    let dest_desc_photo = document.querySelector('#dest_desc_photo');
+    let destinationPhoto = document.querySelector('#destinationPhoto');
     let weather = document.querySelector('#weather');
 
-    destination_details.innerHTML = data.to;
-    boarding_details.innerText = data.from;
-    departure_date.innerHTML = data.date;
+    destinationDetails.innerHTML = data.to;
+    boardingDetails.innerText = data.from;
+    departureDate.innerHTML = data.date;
 
-    if (data.daystogo < 0) {
-        document.querySelector('#days_to_go_details').innerHTML = 'Seems like you have already been to the trip!';
+    if (data.leavingWhen < 0) {
+        document.querySelector('#leavingWhen').innerHTML = 'Seems like you have already been to the trip!';
     } else {
-        number_of_days.innerHTML = data.daystogo;
+        numberOfDays.innerHTML = data.leavingWhen;
     }
     temperature.innerHTML = data.temperature + '&#8451;';
     if (data.cityImage !== undefined) {
-        dest_desc_photo.setAttribute('src', data.cityImage);
+        destinationPhoto.setAttribute('src', data.cityImage);
     }
 
     weather.innerHTML = data.weather_condition;
 }
 
-let date_diff_indays = function (date1) {
+let dateDiffInDays = function (date1) {
     let dt1 = new Date(date1);
     let dt2 = new Date();
     return Math.floor((Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) - Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate())) / (1000 * 60 * 60 * 24));
@@ -158,7 +163,7 @@ let date_diff_indays = function (date1) {
 
 
 export {
-    plan_trip,
+    websiteMain,
     handleSubmit,
-    trip_details_section
+    tripDetails
 }

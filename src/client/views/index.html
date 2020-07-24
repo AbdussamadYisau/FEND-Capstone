@@ -7,7 +7,7 @@
 </head>
 <body>
     
-    <main>
+    <div>
         <section class="mainBody">
             <div id="tripForm">
                 <h1>
@@ -24,7 +24,7 @@
             </div>
         </section>
 
-        <section class='invisible' id="tripDetails">
+        <section class='invisible' id="tripDetailsSection">
             <div id="tripDetails">
                 <div id="destPhoto">
                     <img id="destinationPhoto" src="" alt="destination image">
@@ -35,8 +35,8 @@
                     <div id="destinationDetails">You are going to: <span class="dynamicContent"
                                                                           id="destination">London</span></div>
                     <div id="departureDetails">Departing on: <span class="dynamicContent"
-                                                                    id="departingdate">31/07/2020</span></div>
-                    <div id="leavingWhen">Days to go: <span class="dynamicContent" id="numberofdays">31</span>
+                                                                    id="departingDate">31/07/2020</span></div>
+                    <div id="leavingWhen">Days to go: <span class="dynamicContent" id="numberOfDays">31</span>
                     </div>
                     <div id="temperatureDetails">Expect weather to be: <span class="dynamicContent"
                                                                              id="temperature">23 &#8451;</span> , mostly
@@ -47,6 +47,18 @@
                 </div>
             </div>
         </section>
-    </main>
+    </div>
+
+    <!-- <script>
+        // Check that service workers are supported
+        if ('serviceWorker' in navigator) {
+            // Use the window load event to keep the page load performant
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        } else {
+            console.log("Service Working not supported");
+        }
+    </script> -->
 </body>
 </html>

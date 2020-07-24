@@ -20,7 +20,7 @@ const cors = require('cors');
 app.use(cors());
 
 // Initialize the main project folder
-app.use(express.static('website'));
+app.use(express.static('dist'));
 
 // Setup Server
 const port = 3030;
@@ -32,10 +32,10 @@ function listening() {
 }
 
 // GET route setup to return the JS object created projectData
-app.get('/all', getData);
+app.get('/', getData);
 
 function getData(req,res){
-    res.send(projectData);
+    res.status(200).send('dist/index.html');
 }
 
 // POST route setup to add an entry to the project endpoint
@@ -47,9 +47,16 @@ app.post('/addData', addData);
 function addData(req, res){
     let newData = req.body;
 
+    projectData['to'] = newData.to;
+    projectData['from'] = newData.from;
+    projectData['temperature'] = newData.temperature;
+    projectData['weather'] = newData.weather_condition;
+    projectData['daystogo'] = newData.leavingWhen;
+    projectData['cityImage'] = newData.cityImage;
     projectData['date'] = newData.date;
-    projectData['temp'] = newData.temp;
-    projectData['content'] = newData.content;
+    
+    
+    
 
     res.send(projectData);
 }

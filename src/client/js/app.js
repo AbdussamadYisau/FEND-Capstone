@@ -4,7 +4,7 @@ const deleteTrip = document.querySelector("#remove");
 const submit = document.querySelector("#submitForm");
 
 function deleteFlight(event) {
-    document.querySelector("#tripForm").reset();
+    document.querySelector("#tripForm");
     tripDetails.classList.add("invisible");
     location.reload();
 }
