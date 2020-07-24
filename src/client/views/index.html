@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEND Capstone - TravelApp</title>
+</head>
+<body>
+    
+    <main>
+        <section class="mainBody">
+            <div id="tripForm">
+                <h1>
+                    Travel Anywhere
+                </h1>
+                <form>
+                    <input type="text" id="whereFrom" name="from" placeholder="Where Are You Now?" required>
+                    <input type="text" id="whereTo" name="to" placeholder="Where Are You Headed To?" required>
+
+                    <input type="date" id="departureDate" name="date" placeholder="When Do You Want To Leave?" required>
+
+                    <input type="submit" name="Submit" id="submitForm" value="Submit">
+                </form>
+            </div>
+        </section>
+
+        <section class='invisible' id="tripDetails">
+            <div id="tripDetails">
+                <div id="destPhoto">
+                    <img id="destinationPhoto" src="" alt="destination image">
+                </div>
+                <div id="mainDetails">
+                    <div id="boardingDetails">You are boarding from: <span class="dynamicContent"
+                                                                       id="boarding">Lagos</span></div>
+                    <div id="destinationDetails">You are going to: <span class="dynamicContent"
+                                                                          id="destination">London</span></div>
+                    <div id="departureDetails">Departing on: <span class="dynamicContent"
+                                                                    id="departingdate">31/07/2020</span></div>
+                    <div id="leavingWhen">Days to go: <span class="dynamicContent" id="numberofdays">31</span>
+                    </div>
+                    <div id="temperatureDetails">Expect weather to be: <span class="dynamicContent"
+                                                                             id="temperature">23 &#8451;</span> , mostly
+                        <span class="dynamicContent" id="weather">Sunny</span>.</div>
+                    <div>
+                        <button  id="remove">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
