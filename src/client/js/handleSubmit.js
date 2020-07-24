@@ -24,7 +24,7 @@ function handleSubmit(e) {
     details['whereFrom'] = document.querySelector('#whereFrom').value;
     details['whereTo'] = document.querySelector('#whereTo').value;
     details['date'] = document.querySelector('#departureDate').value;
-    details['leavingWhen'] = dateDiffInDays(details['date']);
+    details['daystogo'] = dateDiffInDays(details['date']);
 
     try {
         // Fetching geo stats of destination place.
@@ -132,7 +132,7 @@ function updateUI(data) {
 
     let destinationDetails = document.querySelector("#destination");
     let boardingDetails = document.querySelector("#boarding");
-    let departureDate = document.querySelector("#departureDate");
+    let departureDate = document.querySelector("#departingDate");
     let numberOfDays = document.querySelector('#numberOfDays');
     let temperature = document.querySelector('#temperature');
     let destinationPhoto = document.querySelector('#destinationPhoto');
@@ -142,10 +142,10 @@ function updateUI(data) {
     boardingDetails.innerText = data.from;
     departureDate.innerHTML = data.date;
 
-    if (data.leavingWhen < 0) {
-        document.querySelector('#leavingWhen').innerHTML = 'Seems like you have already been to the trip!';
+    if (data.daystogo < 0) {
+        document.querySelector('#daystogo').innerHTML = 'Seems like you have already been to the trip!';
     } else {
-        numberOfDays.innerHTML = data.leavingWhen;
+        numberOfDays.innerHTML = data.daystogo;
     }
     temperature.innerHTML = data.temperature + '&#8451;';
     if (data.cityImage !== undefined) {
