@@ -48,7 +48,7 @@ function addData(req, res){
     projectData['to'] = newData.whereTo;
     projectData['from'] = newData.whereFrom;
     projectData['temperature'] = newData.temperature;
-    projectData['weather'] = newData.weather_condition;
+    // projectData['weather'] = newData.weather_condition;
     projectData['daystogo'] = newData.daystogo;
     projectData['daysaway'] = newData.daysaway;
     projectData['cityImage'] = newData.cityImage;

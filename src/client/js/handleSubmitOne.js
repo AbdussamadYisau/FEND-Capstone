@@ -1,4 +1,4 @@
-import {geoNames, geoApiKey, weatherForecast, weatherHistory, weatherApiKey, pixaBay, pixaBayKey, url} from "./apiDetails";
+import {geoNames, geoApiKey,weatherForecast, weatherHistory, weatherApiKey, pixaBay, pixaBayKey} from "./apiDetails";
 
 const answerData = {};
 
@@ -35,12 +35,12 @@ function performAction(e) {
     answerData['daysaway'] = amountOfDaysOnTrip(answerData['returnDate'], answerData['date']);
 
     try {
-        // Fetching geographic information of the entered destination
-        grabGeoData(answerData['whereTo'])
-            .then((toInfo) => {
-                //Assigning the data fetched from JSON toInfo
-                const Lat = toInfo.geonames[0].lat;
-                const Long = toInfo.geonames[0].lng;
+        // Fetching longitude and latitude of the destination entered
+        grabGeoLocation(answerData['whereTo'])
+            .then((locationInfo) => {
+                //Assigning the data fetched from JSON locationInfo
+                const Lat = locationInfo.geonames[0].lat;
+                const Long = locationInfo.geonames[0].lng;
 
                 //Getting Weather answerData from the geographic information fetched
                 return grabWeatherData(Lat, Long, answerData['date']);
@@ -48,20 +48,16 @@ function performAction(e) {
             .then((weatherData) => {
                 //Storing those weather answerData in the object we created in the beginning
                 answerData['temperature'] = weatherData['data'][0]['temp'];
-                answerData['weather_condition'] = weatherData['data']['0']['weather']['description'];
 
-                //Calling Pixabay API to fetch the first img of the city that it can find
                 return grabImageData(answerData['whereTo']);
             })
             .then((imageInfo) => {
                 if (imageInfo['hits'].length > 0) {
-                    answerData['cityImage'] = imageInfo['hits'][0]['webformatURL'];
+                    answerData['cityImage'] = imageInfo['hits'][0].largeImageURL;
                 }
-                //Sending data to server to store the answerData in the backend.
                 return postData(answerData);
             })
             .then((data) => {
-                //Receiving the data from server and updating the UI
                 updateUI(data);
             })
     } catch (e) {
@@ -70,8 +66,8 @@ function performAction(e) {
 }
 
 // Function to get GeoNames Api Data
-async function grabGeoData(to) {
-    const response = await fetch(`${geoNames}${to}&maxRows=10&username=${geoApiKey}`);
+const grabGeoLocation = async (location) => {
+    const response = await fetch(`${geoNames}${location}&maxRows=10&username=${geoApiKey}`);
     try {
         return await response.json();
     } catch (e) {
@@ -107,7 +103,7 @@ const grabWeatherData= async (Lat, Long, date) => {
 
 // Function to get Pixabay Api Data
 const grabImageData = async (toCity) => {
-    const response = await fetch(`${pixaBay}${pixaBayKey}&q=${toCity} city&image_type=photo`);
+    const response = await fetch(`${pixaBay}${pixaBayKey}&q=${toCity}city&image_type=photo&pretty=tru&category=places`);
     try {
         return await response.json();
     } catch (e) {
@@ -116,8 +112,8 @@ const grabImageData = async (toCity) => {
 }
 
 //  Function to post data
-const postData = async (site = url) => {
-    const response = await fetch(site, {
+const postData = async (answerData) => {
+    const response = await fetch(`http:localhost:3030/addData`, {
         method: "POST",
         credentials: 'same-origin',
         headers: {
@@ -134,7 +130,7 @@ const postData = async (site = url) => {
 }
 
 // Function to update UI
-function updateUI(data) {
+function updateUI(finalData) {
     tripDetails.classList.remove('invisible');
     tripDetails.scrollIntoView({behavior: "smooth"});
 
@@ -145,30 +141,30 @@ function updateUI(data) {
     let numberOfDaysOnTrip = document.querySelector('#daysAwayOnTrip');
     let temperature = document.querySelector('#temperature');
     let destinationPhoto = document.querySelector('#destinationPhoto');
-    let weather = document.querySelector('#weather');
+    // let weather = document.querySelector('#weather');
 
-    destinationanswerData.innerHTML = data.to;
-    boardinganswerData.innerText = data.from;
-    departureDate.innerHTML = data.date;
+    destinationanswerData.innerHTML = finalData.to;
+    boardinganswerData.innerText = finalData.from;
+    departureDate.innerHTML = finalData.date;
 
-    if (data.daystogo < 0) {
+    if (finalData.daystogo < 0) {
         document.querySelector('#daystogo').innerHTML = 'Seems like you have missed your flight!';
     } else {
-        numberOfDays.innerHTML = data.daystogo;
+        numberOfDays.innerHTML = finalData.daystogo;
     }
 
-    if(data.daysaway < 0 ) {
+    if(finalData.daysaway < 0 ) {
         document.querySelector("#daysaway").innerHTML = 'There must be some sort of error. Try again!';
     } else {
-        numberOfDaysOnTrip.innerHTML = data.daysaway;
+        numberOfDaysOnTrip.innerHTML = finalData.daysaway;
     }
 
-    temperature.innerHTML = data.temperature + '&#8451;';
-    if (data.cityImage !== undefined) {
-        destinationPhoto.setAttribute('src', data.cityImage);
+    temperature.innerHTML = finalData.temperature + '&#8451;';
+    if (finalData.cityImage !== undefined) {
+        destinationPhoto.setAttribute('src', finalData.cityImage);
     }
 
-    weather.innerHTML = data.weather_condition;
+    // weather.innerHTML = finalData.weather_condition;
 }
 
 let dateDiffInDays = function (date1) {
@@ -189,6 +185,7 @@ let amountOfDaysOnTrip = function (date1, date2) {
 export {
     websiteMain,
     deleteTrip,
+    deleteFlight,
     submit,
     performAction,
     tripDetails
