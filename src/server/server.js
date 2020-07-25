@@ -50,6 +50,7 @@ function addData(req, res){
     projectData['temperature'] = newData.temperature;
     projectData['weather'] = newData.weather_condition;
     projectData['daystogo'] = newData.daystogo;
+    projectData['daysaway'] = newData.daysaway;
     projectData['cityImage'] = newData.cityImage;
     projectData['date'] = newData.date;
     

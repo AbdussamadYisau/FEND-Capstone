@@ -7,7 +7,7 @@
 </head>
 <body>
     
-    <div>
+    <main>
         <section class="mainBody">
             <div id="tripForm">
                 <h1>
@@ -17,7 +17,8 @@
                     <input type="text" id="whereFrom" name="from" placeholder="Where Are You Now?" required>
                     <input type="text" id="whereTo" name="to" placeholder="Where Are You Headed To?" required>
 
-                    <input type="date" id="departureDate" name="date" placeholder="When Do You Want To Leave?" required>
+                    <input type="text" class="textbox-n" id="departureDate" name="date" onfocus="(this.type='date')" onblur="(this.type = 'text')" placeholder="Departure Date" required>
+                    <input type="text" class="textbox-n" id="returnDate" name="date" onfocus="(this.type = 'date')" onblur="(this.type = 'text')" placeholder="Return Date" required>
 
                     <input type="submit" name="Submit" id="submitForm" value="Submit">
                 </form>
@@ -38,6 +39,8 @@
                                                                     id="departingDate"></span></div>
                     <div id="daystogo">Days to go: <span class="dynamicContent" id="numberOfDays"></span>
                     </div>
+                    <div id="daysaway">Days that you will be gone: <span class="dynamicContent" id="daysAwayOnTrip"></span>
+                    </div>
                     <div id="temperatureDetails">Expect weather to be: <span class="dynamicContent"
                                                                              id="temperature">23 &#8451;</span> , mostly
                         <span class="dynamicContent" id="weather"></span>.</div>
@@ -47,9 +50,14 @@
                 </div>
             </div>
         </section>
-    </div>
+    </main>
 
-    <!-- <script>
+
+    <footer>
+        <p>Made with 😍 by &copy; <a href="www.github.com/AbdussamadYisau" target="_blank" rel="noopener"> Abdussamad Yisau</a></p>
+    </footer>
+
+    <script>
         // Check that service workers are supported
         if ('serviceWorker' in navigator) {
             // Use the window load event to keep the page load performant
@@ -59,6 +67,6 @@
         } else {
             console.log("Service Working not supported");
         }
-    </script> -->
+    </script>
 </body>
 </html>

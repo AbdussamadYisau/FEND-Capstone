@@ -18,38 +18,43 @@ const websiteMain = document.querySelector('.mainBody');
 
 
 function handleSubmit(e) {
-    e.preventDefault(); //Prevent default behaviour to stop page reload
+    //  To prevent the page from getting refreshed when the submit button is clicked on
+    e.preventDefault(); 
 
     // Get user input values
     details['whereFrom'] = document.querySelector('#whereFrom').value;
     details['whereTo'] = document.querySelector('#whereTo').value;
     details['date'] = document.querySelector('#departureDate').value;
+    details['returnDate'] = document.querySelector('#returnDate').value;
+    
+    //  Add some additional keys that we would be using later on
     details['daystogo'] = dateDiffInDays(details['date']);
+    details['daysaway'] = amountOfDaysOnTrip(details['returnDate'], details['date']);
 
     try {
-        // Fetching geo stats of destination place.
+        // Fetching geographic information of the entered destination
         getGeoData(details['whereTo'])
             .then((toInfo) => {
                 //Assigning the data fetched from JSON toInfo
                 const Lat = toInfo.geonames[0].lat;
                 const Long = toInfo.geonames[0].lng;
 
-                //Getting Weather details
+                //Getting Weather details from the geographic information fetched
                 return getWeatherData(Lat, Long, details['date']);
             })
             .then((weatherData) => {
-                //Storing the weather details
+                //Storing those weather details in the object we created in the beginning
                 details['temperature'] = weatherData['data'][0]['temp'];
                 details['weather_condition'] = weatherData['data']['0']['weather']['description'];
 
-                //Calling Pixabay API to fetch the first img of the city
+                //Calling Pixabay API to fetch the first img of the city that it can find
                 return getImage(details['whereTo']);
             })
-            .then((imageDetails) => {
-                if (imageDetails['hits'].length > 0) {
-                    details['cityImage'] = imageDetails['hits'][0]['webformatURL'];
+            .then((imageInfo) => {
+                if (imageInfo['hits'].length > 0) {
+                    details['cityImage'] = imageInfo['hits'][0]['webformatURL'];
                 }
-                //Sending data to server to store the details.
+                //Sending data to server to store the details in the backend.
                 return postData(details);
             })
             .then((data) => {
@@ -81,7 +86,7 @@ async function getWeatherData(Lat, Long, date) {
     const timeStampOfToday = Math.floor(new Date(todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate()).getTime() / 1000);
 
     let response;
-    // Check if the date is gone and call the appropriate endpoint.
+    // Check if the date is gone, and proceed with next date.
     if (timeStampOfTripDate < timeStampOfToday) {
         let nextDate = new Date(date);
         nextDate.setDate(nextDate.getDate() + 1);
@@ -134,6 +139,7 @@ function updateUI(data) {
     let boardingDetails = document.querySelector("#boarding");
     let departureDate = document.querySelector("#departingDate");
     let numberOfDays = document.querySelector('#numberOfDays');
+    let numberOfDaysOnTrip = document.querySelector('#daysAwayOnTrip');
     let temperature = document.querySelector('#temperature');
     let destinationPhoto = document.querySelector('#destinationPhoto');
     let weather = document.querySelector('#weather');
@@ -147,6 +153,13 @@ function updateUI(data) {
     } else {
         numberOfDays.innerHTML = data.daystogo;
     }
+
+    if(data.daysaway < 0 ) {
+        document.querySelector("#daysaway").innerHTML = 'There must be some sort of error. Try again!';
+    } else {
+        numberOfDaysOnTrip.innerHTML = data.daysaway;
+    }
+
     temperature.innerHTML = data.temperature + '&#8451;';
     if (data.cityImage !== undefined) {
         destinationPhoto.setAttribute('src', data.cityImage);
@@ -159,8 +172,16 @@ let dateDiffInDays = function (date1) {
     let dt1 = new Date(date1);
     let dt2 = new Date();
     return Math.floor((Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) - Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate())) / (1000 * 60 * 60 * 24));
+
 };
 
+let amountOfDaysOnTrip = function (date1, date2) {
+    let dt1 = new Date(date1);
+    let dt2 = new Date(date2)
+
+    return Math.floor((Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) - Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate())) / (1000 * 60 * 60 * 24));
+    
+}
 
 export {
     websiteMain,
