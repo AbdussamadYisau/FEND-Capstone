@@ -1,4 +1,4 @@
-import {handleSubmit, trip_details_section} from "./handleSubmit";
+import {handleSubmitOne} from "./handleSubmitOne";
 
 const deleteTrip = document.querySelector("#remove");
 const submit = document.querySelector("#submitForm");
@@ -11,7 +11,7 @@ function deleteFlight(event) {
 
 
 deleteTrip.addEventListener("click", deleteFlight);
-submit.addEventListener("click", handleSubmit);
+submit.addEventListener("click", handleSubmitOne);
 
 export {
     deleteTrip
