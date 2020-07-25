@@ -1,5 +1,6 @@
 import './styles/style.scss';
-import {performAction, deleteTrip, submit} from "./js/handleSubmitOne";
+import {performAction, deleteTrip} from "./js/handleSubmitOne";
+import {submit} from "./js/app";
 
 
 

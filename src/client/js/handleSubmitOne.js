@@ -1,12 +1,9 @@
-import {geoNames, geoApiKey, weatherForecast, weatherHistory, weatherApiKey, pixaBay, pixaBayKey, url} from "./apiDetails";
+import { geoNames,geoApiKey,weatherForecast, weatherHistory,weatherApiKey,pixaBay, pixaBayKey} from "./apiDetails";
 
 const answerData = {};
-
-
 const tripDetails = document.querySelector('#tripDetailsSection');
 const websiteMain = document.querySelector('.mainBody');
 const deleteTrip = document.querySelector("#remove");
-const submit = document.querySelector("#submitForm");
 
 
 function deleteFlight(event) {
@@ -15,9 +12,7 @@ function deleteFlight(event) {
     location.reload();
 }
 
-// Event Listeners to add functions to existing html dom element
-deleteTrip.addEventListener("click", deleteFlight);
-submit.addEventListener("click", performAction);
+
 
 
 function performAction(e) {
@@ -35,42 +30,42 @@ function performAction(e) {
     answerData['daysaway'] = amountOfDaysOnTrip(answerData['returnDate'], answerData['date']);
 
     try {
-        // Fetching geographic information of the entered destination
-        grabGeoData(answerData['whereTo'])
-            .then((toInfo) => {
-                //Assigning the data fetched from JSON toInfo
-                const Lat = toInfo.geonames[0].lat;
-                const Long = toInfo.geonames[0].lng;
+        // Fetching latitude and longitude of the entered destination
+        getGeoLocation(answerData['whereTo'])
+            .then((locationInfo) => {
+                //Assigning the latitude and longitude fetched from JSON locationInfo
+                const Lat = locationInfo.geonames[0].lat;
+                const Long = locationInfo.geonames[0].lng;
 
-                //Getting Weather answerData from the geographic information fetched
                 return grabWeatherData(Lat, Long, answerData['date']);
             })
             .then((weatherData) => {
-                //Storing those weather answerData in the object we created in the beginning
+                //Storing those temperature and weather condition in the answerData object we created in the beginning.
                 answerData['temperature'] = weatherData['data'][0]['temp'];
                 answerData['weather_condition'] = weatherData['data']['0']['weather']['description'];
 
-                //Calling Pixabay API to fetch the first img of the city that it can find
                 return grabImageData(answerData['whereTo']);
             })
             .then((imageInfo) => {
                 if (imageInfo['hits'].length > 0) {
-                    answerData['cityImage'] = imageInfo['hits'][0]['webformatURL'];
+                    answerData['cityImage'] = imageInfo['hits'][0]['largeImageURL'];
                 }
-                //Sending data to server to store the answerData in the backend.
+                //Sending answerData object to server to store info in projectData object in the backend.
                 return postData(answerData);
             })
             .then((data) => {
-                //Receiving the data from server and updating the UI
+            
                 updateUI(data);
             })
     } catch (e) {
         console.log('error', e);
     }
 }
+//  Add Event Listener
+deleteTrip.addEventListener("click", deleteFlight);
 
 // Function to get GeoNames Api Data
-async function grabGeoData(to) {
+const getGeoLocation = async (to) => {
     const response = await fetch(`${geoNames}${to}&maxRows=10&username=${geoApiKey}`);
     try {
         return await response.json();
@@ -81,7 +76,7 @@ async function grabGeoData(to) {
 
 
 //Function to get weatherbit Api Data
-const grabWeatherData= async (Lat, Long, date) => {
+const grabWeatherData = async (Lat, Long, date) => {
 
     // Getting the timestamp for the current date and traveling date for upcoming processing.
     const tripDate = Math.floor(new Date(date).getTime() / 1000);
@@ -105,7 +100,7 @@ const grabWeatherData= async (Lat, Long, date) => {
     }
 }
 
-// Function to get Pixabay Api Data
+// Function to get info from Pixabay Api Data
 const grabImageData = async (toCity) => {
     const response = await fetch(`${pixaBay}${pixaBayKey}&q=${toCity} city&image_type=photo`);
     try {
@@ -115,13 +110,13 @@ const grabImageData = async (toCity) => {
     }
 }
 
-//  Function to post data
-const postData = async (site = url) => {
-    const response = await fetch(site, {
+//  Function to post data in the backend
+const postData = async (answerData) => {
+    const response = await fetch('http://localhost:3030/addData', {
         method: "POST",
         credentials: 'same-origin',
         headers: {
-            "Content-Type": "application/json; charset=UTF-8"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(answerData)
     });
@@ -188,8 +183,7 @@ let amountOfDaysOnTrip = function (date1, date2) {
 
 export {
     websiteMain,
-    deleteTrip,
-    submit,
     performAction,
+    deleteTrip,
     tripDetails
 }
