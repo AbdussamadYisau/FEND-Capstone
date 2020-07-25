@@ -1,23 +1,26 @@
+import {geoNames, geoApiKey, weatherForecast, weatherHistory, weatherApiKey, pixaBay, pixaBayKey, url} from "./apiDetails";
+
 const answerData = {};
 
-// Base URLs and API keys for GeoNames, Weatherbit and Pixabay URLs
-//  GeoNames
-const geoNames = 'http://api.geonames.org/searchJSON?q=';
-const geoApiKey = 'sammieyisau';
-//  Weatherbit
-const weatherForecast = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=';
-const weatherHistory = 'https://api.weatherbit.io/v2.0/history/daily?lat=';
-const weatherApiKey = '26ce153221364218b08d75d11be68644';
-//  Pixabay
-const pixaBay = 'https://pixabay.com/api/?key=';
-const pixaBayKey = '16471602-8e4cf128d083ab992b7ab8332';
 
 const tripDetails = document.querySelector('#tripDetailsSection');
 const websiteMain = document.querySelector('.mainBody');
+const deleteTrip = document.querySelector("#remove");
+const submit = document.querySelector("#submitForm");
 
 
+function deleteFlight(event) {
+    document.querySelector("#tripForm");
+    tripDetails.classList.add("invisible");
+    location.reload();
+}
 
-function handleSubmitOne(e) {
+// Event Listeners to add functions to existing html dom element
+deleteTrip.addEventListener("click", deleteFlight);
+submit.addEventListener("click", performAction);
+
+
+function performAction(e) {
     //  To prevent the page from getting refreshed when the submit button is clicked on
     e.preventDefault(); 
 
@@ -78,7 +81,7 @@ async function grabGeoData(to) {
 
 
 //Function to get weatherbit Api Data
-async function grabWeatherData(Lat, Long, date) {
+const grabWeatherData= async (Lat, Long, date) => {
 
     // Getting the timestamp for the current date and traveling date for upcoming processing.
     const tripDate = Math.floor(new Date(date).getTime() / 1000);
@@ -103,7 +106,7 @@ async function grabWeatherData(Lat, Long, date) {
 }
 
 // Function to get Pixabay Api Data
-async function grabImageData(toCity) {
+const grabImageData = async (toCity) => {
     const response = await fetch(`${pixaBay}${pixaBayKey}&q=${toCity} city&image_type=photo`);
     try {
         return await response.json();
@@ -113,12 +116,12 @@ async function grabImageData(toCity) {
 }
 
 //  Function to post data
-async function postData(answerData) {
-    const response = await fetch('http://localhost:3030/addData', {
+const postData = async (site = url) => {
+    const response = await fetch(site, {
         method: "POST",
         credentials: 'same-origin',
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json; charset=UTF-8"
         },
         body: JSON.stringify(answerData)
     });
@@ -185,6 +188,8 @@ let amountOfDaysOnTrip = function (date1, date2) {
 
 export {
     websiteMain,
-    handleSubmitOne,
+    deleteTrip,
+    submit,
+    performAction,
     tripDetails
 }

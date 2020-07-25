@@ -1,10 +1,10 @@
 import './styles/style.scss';
-import {handleSubmitOne} from "./js/handleSubmitOne";
-import {deleteTrip} from "./js/app";
+import {performAction, deleteTrip, submit} from "./js/handleSubmitOne";
 
 
 
 export {
-    handleSubmitOne,
-    deleteTrip
+    performAction,
+    deleteTrip,
+    submit
 }
