@@ -33,6 +33,7 @@ module.exports = {
         }),
 
         new WorkboxPlugin.GenerateSW(),
+    
 
         new MiniCssExtractPlugin(
             {

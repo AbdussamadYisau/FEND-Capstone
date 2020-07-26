@@ -163,7 +163,7 @@ function updateUI(data) {
         destinationPhoto.setAttribute('src', data.cityImage);
     }
 
-    weather.innerHTML = data.weather_condition;
+    weather.innerHTML = data.weather;
 }
 
 let dateDiffInDays = function (date1) {
