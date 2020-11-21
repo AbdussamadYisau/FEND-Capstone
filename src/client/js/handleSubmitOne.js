@@ -113,6 +113,7 @@ const grabImageData = async (toCity) => {
 //  Function to post data in the backend
 const postData = async (answerData) => {
     const response = await fetch('http://localhost:3030/addData', {
+        // Find a way to change 3030 to port, is there some module exports thingy that can be done?
         method: "POST",
         credentials: 'same-origin',
         headers: {

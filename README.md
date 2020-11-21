@@ -31,3 +31,6 @@ The project have service workers set up in webpack to provide the offline functi
 Testing is done with Jest. To run test, use the command 
 
 `npm run test`. 
+
+## View on Heroku
+https://fast-fortress-65118.herokuapp.com/
