@@ -23,8 +23,9 @@ app.use(cors());
 app.use(express.static('dist'));
 
 // Setup Server
-const port = process.env.port;
-const server = app.listen(port,listening);
+const port = server.listen(process.env.port || 3030);
+
+app.listen(port,listening);
 
 // Listening function
 function listening() {
