@@ -6,13 +6,15 @@
   "directories": {
     "test": "test"
   },
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "-": "^0.0.1",
     "body-parser": "^1.19.0",
     "clean-webpack-plugin": "^3.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "html-webpack-plugin": "^4.3.0",
     "mini-css-extract-plugin": "^0.9.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
@@ -25,7 +27,7 @@
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.6.0",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^4.5.0",
     "jest": "^26.1.0",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.14.1",
@@ -42,7 +44,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AbdussamadYisau/FEND-Capstone.git"
+    "url": "https://github.com/AbdussamadYisau/FEND-Capstone.git"
   },
   "author": "Abdussamad Yisau",
   "license": "MIT",
