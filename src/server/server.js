@@ -7,6 +7,9 @@ const express = require('express');
 // Require bodyParser dependency
 const bodyParser = require('body-parser');
 
+// Require path dependency
+const path = require('path');
+
 // Start up an instance of app
 const app = express();
 
@@ -36,7 +39,7 @@ function listening() {
 app.get('/', getData);
 
 function getData(req,res){
-    res.status(200).send('dist/index.html');
+    res.status(200).sendFile(path.join(__dirname + './client/views/index.html'));
 }
 
 // POST route setup to add an entry to the project endpoint
