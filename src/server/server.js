@@ -39,7 +39,7 @@ function listening() {
 app.get('/', getData);
 
 function getData(req,res){
-    res.status(200).sendFile(path.join(__dirname + './client/views/index.html'));
+    res.status(200).sendFile(path.join(__dirname + '.../dist/index.html'));
 }
 
 // POST route setup to add an entry to the project endpoint
