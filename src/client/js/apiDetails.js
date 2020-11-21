@@ -1,6 +1,6 @@
 // Base URLs and API keys for GeoNames, Weatherbit and Pixabay URLs
 //  GeoNames
-const geoNames = 'http://api.geonames.org/searchJSON?q=';
+const geoNames = 'https://secure.geonames.org/searchJSON?q=';
 const geoApiKey = 'sammieyisau';
 //  Weatherbit
 const weatherForecast = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=';
