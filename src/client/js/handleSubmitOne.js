@@ -30,6 +30,7 @@ function performAction(e) {
     answerData['daysaway'] = amountOfDaysOnTrip(answerData['returnDate'], answerData['date']);
 
     try {
+        // Put loader here
         // Fetching latitude and longitude of the entered destination
         getGeoLocation(answerData['whereTo'])
             .then((locationInfo) => {
