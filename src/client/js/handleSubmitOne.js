@@ -1,6 +1,7 @@
 import { geoNames,geoApiKey,weatherForecast, weatherHistory,weatherApiKey,pixaBay, pixaBayKey} from "./apiDetails";
 
 const answerData = {};
+const loaderDiv =  document.querySelector('#loaderSection');
 const tripDetails = document.querySelector('#tripDetailsSection');
 const websiteMain = document.querySelector('.mainBody');
 const deleteTrip = document.querySelector("#remove");
@@ -31,6 +32,10 @@ function performAction(e) {
 
     try {
         // Put loader here
+
+        let loader = `<div class="loader"></div>`;
+
+       loaderDiv.innerHTML = loader;
         // Fetching latitude and longitude of the entered destination
         getGeoLocation(answerData['whereTo'])
             .then((locationInfo) => {
@@ -131,6 +136,7 @@ const postData = async (answerData) => {
 
 // Function to update UI
 function updateUI(data) {
+    loaderDiv.classList.replace('visible', 'invisible');
     tripDetails.classList.remove('invisible');
     tripDetails.scrollIntoView({behavior: "smooth"});
 
